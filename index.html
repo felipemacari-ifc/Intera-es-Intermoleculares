@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz de Química</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">⚗</span>
+        <span>Química em Jogo</span>
+      </div>
+      <span class="tag">QUIZ • 10 QUESTÕES</span>
+    </header>
+
+    <!-- TELA INICIAL -->
+    <section class="card" id="start-screen">
+      <p class="eyebrow">DESAFIO DE QUÍMICA</p>
+
+      <h1>Interações<br>
+        <span>Intermoleculares</span>
+      </h1>
+
+      <p class="description">
+        Você prestou atenção na apresentação?
+        Teste seus conhecimentos sobre forças de London,
+        dipolo-dipolo e ligações de hidrogênio.
+      </p>
+
+      <div class="chips">
+        <span>🧠 10 perguntas</span>
+        <span>⚡ Respostas rápidas</span>
+        <span>🏆 Pontuação final</span>
+      </div>
+
+      <button class="primary" id="start-btn">
+        Começar quiz →
+      </button>
+    </section>
+
+    <!-- TELA DAS PERGUNTAS -->
+    <section class="card hidden" id="quiz-screen">
+      <div class="progress-info">
+        <span id="question-count">Pergunta 1 de 10</span>
+        <span id="score-live">Pontos: 0</span>
+      </div>
+
+      <div class="progress">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+
+      <p class="eyebrow" id="topic"></p>
+
+      <h2 id="question-text"></h2>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="feedback hidden" id="feedback"></div>
+
+      <div class="quiz-footer">
+        <span id="answer-status">Escolha uma alternativa</span>
+        <button class="primary hidden" id="next-btn">
+          Próxima →
+        </button>
+      </div>
+    </section>
+
+    <!-- TELA DO RESULTADO -->
+    <section class="card hidden" id="result-screen">
+      <p class="eyebrow">QUIZ CONCLUÍDO</p>
+
+      <div class="result-icon" id="result-icon">🏆</div>
+
+      <h1 id="result-title">Mandou bem!</h1>
+
+      <div class="score-big">
+        <span id="final-score">0</span><small>/10</small>
+      </div>
+
+      <p class="description" id="result-message"></p>
+
+      <div class="chips">
+        <span id="correct-stat"></span>
+        <span id="wrong-stat"></span>
+      </div>
+
+      <button class="primary" id="restart-btn">
+        Jogar novamente ↻
+      </button>
+
+      <div class="review" id="review"></div>
+    </section>
+
+    <footer>
+      Quiz de revisão • Interações intermoleculares
+    </footer>
+  </main>
+
+  <script>
+    // PERGUNTAS BASEADAS NA APRESENTAÇÃO
+
+    const questions = [
+      {
+        topic: "CONCEITO BÁSICO",
+        question: "1. O que são interações intermoleculares?",
+        options: [
+          "Forças de atração entre moléculas",
+          "Forças que existem somente dentro dos átomos",
+          "Reações que transformam uma substância em outra",
+          "Ligações que existem apenas nos sólidos"
+        ],
+        answer: 0,
+        explanation:
+          "São forças de atração entre moléculas. Elas influenciam propriedades como ponto de ebulição, ponto de fusão, estado físico, solubilidade e volatilidade."
+      },
+      {
+        topic: "FORÇAS DE LONDON",
+        question: "2. Em quais substâncias as forças de London são especialmente importantes?",
+        options: [
+          "Somente na água (H₂O)",
+          "Em moléculas apolares, como O₂, N₂ e CH₄",
+          "Somente no HCl",
+          "Apenas em substâncias que contêm metais"
+        ],
+        answer: 1,
+        explanation:
+          "As forças de London estão presentes em todas as moléculas, mas são especialmente importantes nas substâncias apolares, como O₂, N₂ e CH₄."
+      },
+      {
+        topic: "FORÇAS DE LONDON",
+        question: "3. Como surgem as forças de London?",
+        options: [
+          "Pela ligação do hidrogênio com o oxigênio",
+          "Pela transferência completa de elétrons",
+          "Por dipolos instantâneos que podem induzir dipolos em moléculas próximas",
+          "Pela transformação das moléculas em íons"
+        ],
+        answer: 2,
+        explanation:
+          "O movimento dos elétrons pode criar uma distribuição momentaneamente desigual de cargas. Isso forma um dipolo instantâneo, que pode induzir outro dipolo numa molécula próxima."
+      },
+      {
+        topic: "FORÇAS DE LONDON",
+        question: "4. Qual afirmação sobre as forças de London está correta?",
+        options: [
+          "Só existem na água",
+          "Só aparecem em moléculas polares",
+          "Estão presentes em todas as moléculas",
+          "São exclusivas das ligações de hidrogênio"
+        ],
+        answer: 2,
+        explanation:
+          "As forças de London estão presentes em todas as moléculas, inclusive nas polares e nas apolares."
+      },
+      {
+        topic: "DIPOLO-DIPOLO",
+        question: "5. A interação dipolo-dipolo ocorre principalmente entre moléculas...",
+        options: [
+          "Apolares",
+          "Polares",
+          "Sem elétrons",
+          "Formadas apenas por metais"
+        ],
+        answer: 1,
+        explanation:
+          "As moléculas polares possuem uma distribuição desigual de cargas. A região parcialmente positiva de uma molécula atrai a região parcialmente negativa de outra."
+      },
+      {
+        topic: "DIPOLO-DIPOLO",
+        question: "6. Qual das substâncias abaixo é um exemplo de molécula polar que apresenta interação dipolo-dipolo?",
+        options: [
+          "O₂",
+          "N₂",
+          "HCl",
+          "CH₄"
+        ],
+        answer: 2,
+        explanation:
+          "O HCl é polar. O hidrogênio fica parcialmente positivo (δ+) e o cloro parcialmente negativo (δ−), permitindo a atração entre moléculas."
+      },
+      {
+        topic: "LIGAÇÃO DE HIDROGÊNIO",
+        question: "7. Segundo a regra apresentada na aula, a ligação de hidrogênio ocorre quando o H está ligado diretamente a quais elementos?",
+        options: [
+          "Carbono, cloro ou enxofre",
+          "Sódio, cálcio ou ferro",
+          "Flúor, oxigênio ou nitrogênio",
+          "Qualquer elemento da tabela periódica"
+        ],
+        answer: 2,
+        explanation:
+          "A regra ensinada é F, O ou N: flúor, oxigênio ou nitrogênio. Exemplos citados na aula são HF, H₂O e NH₃."
+      },
+      {
+        topic: "LIGAÇÃO DE HIDROGÊNIO",
+        question: "8. Qual substância abaixo forma ligações de hidrogênio entre suas moléculas?",
+        options: [
+          "O₂",
+          "H₂O",
+          "N₂",
+          "CH₄"
+        ],
+        answer: 1,
+        explanation:
+          "Na água, o hidrogênio está ligado diretamente ao oxigênio. Isso permite a formação de ligações de hidrogênio entre as moléculas de H₂O."
+      },
+      {
+        topic: "PROPRIEDADES DA ÁGUA",
+        question: "9. Por que a água tem um ponto de ebulição relativamente alto para uma molécula tão pequena?",
+        options: [
+          "Porque suas moléculas não se atraem",
+          "Porque a água é apolar",
+          "Porque as ligações de hidrogênio exigem energia para serem vencidas",
+          "Porque a água evapora sem receber energia"
+        ],
+        answer: 2,
+        explanation:
+          "As ligações de hidrogênio provocam atração entre as moléculas de água. É necessário fornecer energia para vencer essas interações durante a ebulição."
+      },
+      {
+        topic: "REVISÃO FINAL",
+        question: "10. Qual alternativa relaciona corretamente a substância e a interação estudada na aula?",
+        options: [
+          "O₂ — ligação de hidrogênio",
+          "HCl — dipolo-dipolo",
+          "H₂O — somente forças de London",
+          "N₂ — ligação de hidrogênio"
+        ],
+        answer: 1,
+        explanation:
+          "O HCl é polar e apresenta interação dipolo-dipolo. O₂ e N₂ são apolares e têm forças de London. A água forma ligações de hidrogênio."
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let answered = false;
+
+    const $ = id => document.getElementById(id);
+
+    const startScreen = $("start-screen");
+    const quizScreen = $("quiz-screen");
+    const resultScreen = $("result-screen");
+
+    $("start-btn").addEventListener("click", startQuiz);
+    $("next-btn").addEventListener("click", nextQuestion);
+    $("restart-btn").addEventListener("click", startQuiz);
+
+    function startQuiz() {
+      current = 0;
+      score = 0;
+      answered = false;
+
+      startScreen.classList.add("hidden");
+      resultScreen.classList.add("hidden");
+      quizScreen.classList.remove("hidden");
+
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderQuestion() {
+      answered = false;
+
+      const q = questions[current];
+
+      $("question-count").textContent =
+        `Pergunta ${current + 1} de ${questions.length}`;
+
+      $("score-live").textContent = `Pontos: ${score}`;
+
+      $("progress-fill").style.width =
+        `${(current / questions.length) * 100}%`;
+
+      $("topic").textContent = q.topic;
+      $("question-text").textContent = q.question;
+
+      $("answers").replaceChildren();
+
+      $("feedback").className = "feedback hidden";
+      $("feedback").textContent = "";
+
+      $("next-btn").classList.add("hidden");
+      $("answer-status").textContent = "Escolha uma alternativa";
+
+      q.options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.className = "answer";
+
+        const letter = document.createElement("span");
+        letter.className = "letter";
+        letter.textContent = String.fromCharCode(65 + index);
+
+        const text = document.createElement("span");
+        text.textContent = option;
+
+        button.append(letter, text);
+
+        button.addEventListener("click", () => {
+          selectAnswer(index);
+        });
+
+        $("answers").append(button);
+      });
+    }
+
+    function selectAnswer(index) {
+      if (answered) return;
+
+      answered = true;
+
+      const q = questions[current];
+      const correct = index === q.answer;
+
+      if (correct) score++;
+
+      [...$("answers").children].forEach((button, i) => {
+        button.disabled = true;
+
+        if (i === q.answer) {
+          button.classList.add("correct");
+        }
+
+        if (i === index && !correct) {
+          button.classList.add("wrong");
+        }
+      });
+
+      $("score-live").textContent = `Pontos: ${score}`;
+
+      $("answer-status").textContent = correct
+        ? "Resposta correta!"
+        : "Resposta incorreta";
+
+      const feedback = $("feedback");
+      feedback.className = `feedback ${correct ? "good" : "bad"}`;
+
+      const title = document.createElement("strong");
+      title.textContent = correct ? "Muito bem! " : "Quase! ";
+
+      feedback.replaceChildren(
+        title,
+        document.createTextNode(q.explanation)
+      );
+
+      $("progress-fill").style.width =
+        `${((current + 1) / questions.length) * 100}%`;
+
+      $("next-btn").classList.remove("hidden");
+
+      $("next-btn").textContent =
+        current === questions.length - 1
+          ? "Ver resultado →"
+          : "Próxima →";
+    }
+
+    function nextQuestion() {
+      if (!answered) return;
+
+      current++;
+
+      if (current < questions.length) {
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      quizScreen.classList.add("hidden");
+      resultScreen.classList.remove("hidden");
+
+      $("final-score").textContent = score;
+
+      $("correct-stat").textContent =
+        `✅ ${score} acerto${score === 1 ? "" : "s"}`;
+
+      $("wrong-stat").textContent =
+        `📘 ${questions.length - score} para revisar`;
+
+      let title;
+      let message;
+      let icon;
+
+      if (score >= 9) {
+        title = "Craque da química!";
+        message = "Você dominou muito bem o conteúdo da apresentação.";
+        icon = "🏆";
+      } else if (score >= 7) {
+        title = "Mandou muito bem!";
+        message = "Você entendeu os conceitos principais. Revise os detalhes abaixo.";
+        icon = "🧪";
+      } else if (score >= 5) {
+        title = "Bom começo!";
+        message = "Confira as explicações e tente mais uma vez.";
+        icon = "💡";
+      } else {
+        title = "Hora de revisar!";
+        message = "Relembre os três tipos de interação apresentados na aula e tente novamente.";
+        icon = "🔬";
+      }
+
+      $("result-title").textContent = title;
+      $("result-message").textContent = message;
+      $("result-icon").textContent = icon;
+
+      const review = $("review");
+      review.replaceChildren();
+
+      const heading = document.createElement("p");
+      heading.className = "eyebrow";
+      heading.textContent = "GABARITO PARA REVISAR";
+      review.append(heading);
+
+      questions.forEach((q, index) => {
+        const item = document.createElement("article");
+        item.className = "review-item";
+
+        const question = document.createElement("strong");
+        question.textContent = q.question;
+
+        const answer = document.createElement("p");
+        answer.textContent =
+          `Resposta correta: ${String.fromCharCode(65 + q.answer)} — ` +
+          `${q.options[q.answer]}. ${q.explanation}`;
+
+        item.append(question, answer);
+        review.append(item);
+      });
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  </script>
+</body>
+</html>
